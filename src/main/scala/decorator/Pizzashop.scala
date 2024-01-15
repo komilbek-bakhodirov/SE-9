@@ -5,7 +5,7 @@ trait Pizza:
     def price: BigDecimal
 
 class Margherita extends Pizza:
-    override def diameter: Int = 18
+    override def diameter: Int = 28
     override def price: BigDecimal = 9
 
 class Funghi extends Margherita:
