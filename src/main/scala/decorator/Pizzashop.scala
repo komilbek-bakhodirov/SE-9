@@ -16,9 +16,9 @@ class Verdura extends Margherita:
 
 @main def Pizzashop(): Unit =
     // pizza Verdura with extra cheese
-    val p1: Pizza = ???
+    val p1: Pizza = new ExtraCheeseDecorator(new Verdura)
     // pizza Funghi family size with vegan cheese
-    val p2: Pizza = ???
+    val p2: Pizza = new FamilySizeDecorator(new VeganCheeseDecorator(new Funghi))
 
     println(s"Price of a pizza verdura with extra cheese is ${p1.price}")
 
@@ -27,6 +27,30 @@ class Verdura extends Margherita:
 
 // === ADD YOUR CODE BELOW ===
 
+// Decorator base class
+abstract class PizzaDecorator(pizza: Pizza) extends Pizza{
+    override def diameter: Int = pizza.diameter
+
+    override def price: BigDecimal = pizza.price
+}
+
+// Concrete decorators
+class ExtraCheeseDecorator(pizza: Pizza) extends PizzaDecorator(pizza){
+    override def price: BigDecimal = pizza.price + 2
+}
+
+class VeganCheeseDecorator(pizza: Pizza) extends PizzaDecorator(pizza){
+    override def price: BigDecimal = pizza.price + 1.5
+}
+
+class ExtraOnionDecorator(pizza: Pizza) extends PizzaDecorator(pizza){
+    override def price: BigDecimal = pizza.price + 1
+}
+
+class FamilySizeDecorator(pizza: Pizza) extends PizzaDecorator(pizza) {
+    override def diameter: Int = 42
+    override def price: BigDecimal = pizza.price * 2
+}
 
 
 

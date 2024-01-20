@@ -1,6 +1,6 @@
 package observer.device
 
-import observer.log.{Entity, EntityChange, Loggable}
+import observer.log.{Entity, EntityChange, Loggable, SwitchChange}
 
 case class Switch(name: String) extends Control with Loggable[Entity, EntityChange]:
   private var state: Boolean = false
@@ -8,7 +8,8 @@ case class Switch(name: String) extends Control with Loggable[Entity, EntityChan
   override def currentState: Int = if state then 1 else 0
 
   override def set(state: Int): Boolean =
-    if (this.state)
+    val oldState = this.state
+    val result = if (this.state)
       if (state <= 0)
         this.state = false
         true
@@ -20,3 +21,10 @@ case class Switch(name: String) extends Control with Loggable[Entity, EntityChan
         true
       else
         false
+
+    if (oldState != this.state){
+      val delta = if (this.state) SwitchChange.On else SwitchChange.Off
+      notifyObservers(this, delta, System.currentTimeMillis())
+    }
+    result 
+
